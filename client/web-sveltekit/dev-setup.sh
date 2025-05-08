@@ -28,14 +28,14 @@ echo "Starting SvelteKit in standalone mode..."
 echo "API URL: $SOURCEGRAPH_API_URL"
 echo "Using Node.js $(node -v)"
 
-# Try to run the web-standalone-http command from the root
+# Try to run the web-standalone-http command with explicit API URL
 cd ../../
 if pnpm list | grep -q "@sourcegraph/web"; then
-  echo "Using web standalone mode"
+  echo "Using web standalone mode with direct API URL"
   cd client/web
-  SOURCEGRAPH_API_URL="http://localhost:7081" pnpm serve:dev
+  NODE_ENV=development WEB_BUILDER_SERVE_INDEX=true SOURCEGRAPH_API_URL="http://localhost:7081" pnpm serve:dev
 else
-  echo "Falling back to SvelteKit dev mode"
+  echo "Falling back to SvelteKit dev mode with direct API URL"
   cd client/web-sveltekit
-  pnpm dev
+  SOURCEGRAPH_API_URL="http://localhost:7081" pnpm dev
 fi
